@@ -324,20 +324,21 @@ export default function MultipleChoice({ onComplete }: Props) {
             <AnimatePresence mode="wait">
               <div className="space-y-3">
                 {questions[currentQuestion].options.map((option, index) => (
-                  <motion.button
-                    key={index}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                    onClick={() => handleAnswerSelect(index)}
-                    className={`w-full p-4 text-left rounded-lg border transition-colors ${
-                      selectedAnswer === index ? "border-primary" : "hover:bg-muted"
-                    }`}
-                    disabled={selectedAnswer !== null}
-                  >
-                    <span className="text-muted-foreground mr-2">{String.fromCharCode(65 + index)}.</span>
-                    {option}
-                  </motion.button>
+                 <motion.button
+                 key={index}
+                 initial={{ opacity: 0, x: -20 }}
+                 animate={{ opacity: 1, x: 0 }}
+                 transition={{ delay: index * 0.1 }}
+                 onClick={() => handleAnswerSelect(index)}
+                 className={`w-full p-4 text-left rounded-lg border transition-colors ${
+                   selectedAnswer === index ? "bg-green-500 text-white" : "hover:bg-gray-200"
+                 }`}
+                 disabled={selectedAnswer !== null}
+               >
+                 <span className="text-muted-foreground mr-2">{String.fromCharCode(65 + index)}.</span>
+                 {option}
+               </motion.button>
+               
                 ))}
               </div>
             </AnimatePresence>
@@ -346,7 +347,7 @@ export default function MultipleChoice({ onComplete }: Props) {
 
         <div className="mt-auto p-4">
           <Button
-            className="w-full bg-primary text-primary-foreground"
+            className="w-full bg-primary text-primary-foreground hover:bg-red-400"
             onClick={handleContinue}
             disabled={selectedAnswer === null}
           >

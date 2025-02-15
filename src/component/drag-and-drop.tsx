@@ -331,19 +331,21 @@ export default function DragAndDrop({ initialScore, onComplete }: Props) {
           </div>
 
           <div className="grid grid-cols-2 gap-4 mb-8">
-            {dropZones.map((zone, index) => (
-              <div
-                key={zone.id}
-                onDragOver={(e) => handleDragOver(e, zone.id)}
-                onDrop={(e) => handleDrop(e, zone.id)}
-                className="p-4 rounded-lg bg-secondary min-h-[100px] flex flex-col justify-between"
-              >
-                <p className="text-sm mb-2">{zone.title}</p>
-                {zone.term && (
-                  <div className="bg-background shadow-sm rounded p-2 text-sm mt-auto">{zone.term.content}</div>
-                )}
-              </div>
-            ))}
+          {dropZones.map((zone) => (
+  <div
+    key={zone.id}
+    onDragOver={(e) => handleDragOver(e, zone.id)}
+    onDrop={(e) => handleDrop(e, zone.id)}
+    className="p-4 rounded-lg bg-secondary min-h-[100px] flex flex-col justify-between"
+  >
+    <p className="text-sm mb-2">{zone.title}</p>
+    {zone.term && (
+      <div className="bg-purple-400 shadow-sm rounded p-2 text-sm mt-auto text-white">
+        {zone.term.content}
+      </div>
+    )}
+  </div>
+))}
           </div>
 
           <div className="flex flex-wrap gap-2 justify-center mb-8">
@@ -352,7 +354,7 @@ export default function DragAndDrop({ initialScore, onComplete }: Props) {
                 key={term.id}
                 draggable
                 onDragStart={() => handleDragStart(term)}
-                className="bg-gray-900 text-white hover:bg-gray-800"
+                className="bg-gray-900 text-white hover:bg-green-500"
               >
                 {term.content}
               </Button>
@@ -365,7 +367,7 @@ export default function DragAndDrop({ initialScore, onComplete }: Props) {
             </Button>
 
             <Button
-              className="flex-1 bg-primary text-primary-foreground"
+              className="flex-1 bg-primary text-primary-foreground hover:bg-green-400"
               onClick={handleNextQuestion}
               disabled={availableTerms.length > 0}
             >

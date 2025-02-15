@@ -1,35 +1,48 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "../component/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../component/ui/card"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../component/ui/select"
-import { Brain, Trophy, Clock, BarChart3, BookOpen, Award, Star } from "lucide-react"
+import { useState } from "react";
+import { Button } from "../component/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../component/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../component/ui/select";
+import { Brain, Trophy, Clock, BarChart3, BookOpen, Award, Star } from "lucide-react";
 
 interface Props {
-  onStartQuiz: (subject: string, difficulty: string) => void
+  onStartQuiz: (subject: string, difficulty: string) => void;
 }
 
 const subjects = [
   { id: "science", name: "Science", icon: Brain },
   { id: "math", name: "Mathematics", icon: BarChart3 },
   { id: "english", name: "English", icon: BookOpen },
-]
+];
 
 const difficulties = [
   { id: "beginner", name: "Beginner", icon: Star },
   { id: "intermediate", name: "Intermediate", icon: Award },
   { id: "advanced", name: "Advanced", icon: Trophy },
-]
+];
 
 export default function Dashboard({ onStartQuiz }: Props) {
-  const [selectedSubject, setSelectedSubject] = useState("")
-  const [selectedDifficulty, setSelectedDifficulty] = useState("")
+  const [selectedSubject, setSelectedSubject] = useState("");
+  const [selectedDifficulty, setSelectedDifficulty] = useState("");
   const [recentScores] = useState([
     { subject: "Science", score: 85, date: "2024-02-14" },
     { subject: "Mathematics", score: 92, date: "2024-02-13" },
     { subject: "English", score: 78, date: "2024-02-12" },
-  ])
+  ]);
 
   return (
     <div className="container mx-auto p-4 space-y-8">
@@ -39,52 +52,60 @@ export default function Dashboard({ onStartQuiz }: Props) {
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {/* Quick Start Card */}
         <Card>
           <CardHeader>
             <CardTitle>Quick Start</CardTitle>
             <CardDescription>Choose a subject and difficulty to begin</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
+            {/* Subject Selection */}
             <div className="space-y-2">
               <label className="text-sm font-medium">Subject</label>
-              <Select value={selectedSubject} onValueChange={setSelectedSubject}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select subject" />
-                </SelectTrigger>
-                <SelectContent>
-                  {subjects.map((subject) => (
-                    <SelectItem key={subject.id} value={subject.id}>
-                      <div className="flex items-center gap-2">
-                        <subject.icon className="h-4 w-4" />
-                        {subject.name}
-                      </div>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <div className="relative">
+                <Select value={selectedSubject} onValueChange={setSelectedSubject}>
+                  <SelectTrigger className="min-w-[200px] hover:bg-red-500">
+                    <SelectValue placeholder="Select subject" />
+                  </SelectTrigger>
+                  <SelectContent className="absolute z-50 bg-white shadow-lg">
+                    {subjects.map((subject) => (
+                      <SelectItem key={subject.id} value={subject.id}>
+                        <div className="flex items-center gap-2">
+                          <subject.icon className="h-4 w-4" />
+                          {subject.name}
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
+
+            {/* Difficulty Selection */}
             <div className="space-y-2">
               <label className="text-sm font-medium">Difficulty</label>
-              <Select value={selectedDifficulty} onValueChange={setSelectedDifficulty}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select difficulty" />
-                </SelectTrigger>
-                <SelectContent>
-                  {difficulties.map((difficulty) => (
-                    <SelectItem key={difficulty.id} value={difficulty.id}>
-                      <div className="flex items-center gap-2">
-                        <difficulty.icon className="h-4 w-4" />
-                        {difficulty.name}
-                      </div>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <div className="relative">
+                <Select value={selectedDifficulty} onValueChange={setSelectedDifficulty}>
+                  <SelectTrigger className="min-w-[200px] hover:bg-red-500">
+                    <SelectValue placeholder="Select difficulty" />
+                  </SelectTrigger>
+                  <SelectContent className="absolute z-50 bg-white shadow-lg">
+                    {difficulties.map((difficulty) => (
+                      <SelectItem key={difficulty.id} value={difficulty.id}>
+                        <div className="flex items-center gap-2">
+                          <difficulty.icon className="h-4 w-4" />
+                          {difficulty.name}
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
           </CardContent>
           <CardFooter>
             <Button
-              className="w-full"
+              className="w-full hover:bg-green-500"
               disabled={!selectedSubject || !selectedDifficulty}
               onClick={() => onStartQuiz(selectedSubject, selectedDifficulty)}
             >
@@ -93,6 +114,7 @@ export default function Dashboard({ onStartQuiz }: Props) {
           </CardFooter>
         </Card>
 
+        {/* Recent Scores Card */}
         <Card>
           <CardHeader>
             <CardTitle>Recent Scores</CardTitle>
@@ -116,6 +138,7 @@ export default function Dashboard({ onStartQuiz }: Props) {
           </CardContent>
         </Card>
 
+        {/* Statistics Card */}
         <Card>
           <CardHeader>
             <CardTitle>Statistics</CardTitle>
@@ -149,6 +172,5 @@ export default function Dashboard({ onStartQuiz }: Props) {
         </Card>
       </div>
     </div>
-  )
+  );
 }
-

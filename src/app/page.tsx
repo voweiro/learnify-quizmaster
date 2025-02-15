@@ -26,7 +26,7 @@ export default function Home() {
   }
 
   return (
-    
+    <div>
       <Dashboard
         onStartQuiz={(subject, difficulty) => {
           setSelectedSubject(subject)

@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "../component/ui/button"
-import { Progress } from "../component/ui/progress"
-import { ArrowLeft, HelpCircle, Timer } from "lucide-react"
+import { useState, useEffect } from "react";
+import { Button } from "../component/ui/button";
+import { Progress } from "../component/ui/progress";
+import { ArrowLeft, HelpCircle, Timer } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -11,30 +11,44 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../component/ui/dialog"
-import MultipleChoice from "./multiple-choice"
+} from "../component/ui/dialog";
+import MultipleChoice from "./multiple-choice";
 
 interface Props {
-  subject: string
-  difficulty: string
-  onExit: () => void
+  subject: string;
+  difficulty: string;
+  onExit: () => void;
 }
 
 export default function QuizSection({ subject, difficulty, onExit }: Props) {
-  const [quizCompleted, setQuizCompleted] = useState(false)
-  const [totalScore, setTotalScore] = useState(0)
-  const [timeRemaining, setTimeRemaining] = useState(3600) // 1 hour in seconds
+  const [quizCompleted, setQuizCompleted] = useState(false);
+  const [totalScore, setTotalScore] = useState(0);
+  const [timeRemaining, setTimeRemaining] = useState(600); // 10 minutes in seconds
+
+  // Timer logic
+  useEffect(() => {
+    if (timeRemaining <= 0) {
+      handleQuizComplete(totalScore); // Auto-submit when timer reaches 0
+      return;
+    }
+
+    const timer = setInterval(() => {
+      setTimeRemaining((prevTime) => Math.max(prevTime - 1, 0));
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [timeRemaining, totalScore]);
 
   const formatTime = (seconds: number) => {
-    const minutes = Math.floor(seconds / 60)
-    const remainingSeconds = seconds % 60
-    return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`
-  }
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
+  };
 
   const handleQuizComplete = (score: number) => {
-    setTotalScore(score)
-    setQuizCompleted(true)
-  }
+    setTotalScore(score);
+    setQuizCompleted(true);
+  };
 
   if (quizCompleted) {
     return (
@@ -65,7 +79,7 @@ export default function QuizSection({ subject, difficulty, onExit }: Props) {
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -92,7 +106,7 @@ export default function QuizSection({ subject, difficulty, onExit }: Props) {
                       <li>Multiple Choice Questions (50 points)</li>
                       <li>Drag and Drop Matching (30 points)</li>
                     </ul>
-                    <p className="mt-4">You have 1 hour to complete both sections. Good luck!</p>
+                    <p className="mt-4">You have 10 minutes to complete both sections. Good luck!</p>
                   </DialogDescription>
                 </DialogHeader>
               </DialogContent>
@@ -112,6 +126,5 @@ export default function QuizSection({ subject, difficulty, onExit }: Props) {
         <MultipleChoice onComplete={handleQuizComplete} />
       </div>
     </div>
-  )
+  );
 }
-

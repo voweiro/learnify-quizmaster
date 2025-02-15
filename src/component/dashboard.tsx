@@ -38,11 +38,21 @@ const difficulties = [
 export default function Dashboard({ onStartQuiz }: Props) {
   const [selectedSubject, setSelectedSubject] = useState("");
   const [selectedDifficulty, setSelectedDifficulty] = useState("");
+  const [showInstructions, setShowInstructions] = useState(false);
   const [recentScores] = useState([
     { subject: "Science", score: 85, date: "2024-02-14" },
     { subject: "Mathematics", score: 92, date: "2024-02-13" },
     { subject: "English", score: 78, date: "2024-02-12" },
   ]);
+
+  const handleStartQuiz = () => {
+    setShowInstructions(true);
+  };
+
+  const confirmStartQuiz = () => {
+    setShowInstructions(false);
+    onStartQuiz(selectedSubject, selectedDifficulty);
+  };
 
   return (
     <div className="container mx-auto p-4 space-y-8">
@@ -62,52 +72,48 @@ export default function Dashboard({ onStartQuiz }: Props) {
             {/* Subject Selection */}
             <div className="space-y-2">
               <label className="text-sm font-medium">Subject</label>
-              <div className="relative">
-                <Select value={selectedSubject} onValueChange={setSelectedSubject}>
-                  <SelectTrigger className="min-w-[200px] hover:bg-red-500">
-                    <SelectValue placeholder="Select subject" />
-                  </SelectTrigger>
-                  <SelectContent className="absolute z-50 bg-white shadow-lg">
-                    {subjects.map((subject) => (
-                      <SelectItem key={subject.id} value={subject.id}>
-                        <div className="flex items-center gap-2">
-                          <subject.icon className="h-4 w-4" />
-                          {subject.name}
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+              <Select value={selectedSubject} onValueChange={setSelectedSubject}>
+                <SelectTrigger className="min-w-[200px] hover:bg-red-500">
+                  <SelectValue placeholder="Select subject" />
+                </SelectTrigger>
+                <SelectContent className="absolute z-50 bg-white shadow-lg">
+                  {subjects.map((subject) => (
+                    <SelectItem key={subject.id} value={subject.id}>
+                      <div className="flex items-center gap-2">
+                        <subject.icon className="h-4 w-4" />
+                        {subject.name}
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
             {/* Difficulty Selection */}
             <div className="space-y-2">
               <label className="text-sm font-medium">Difficulty</label>
-              <div className="relative">
-                <Select value={selectedDifficulty} onValueChange={setSelectedDifficulty}>
-                  <SelectTrigger className="min-w-[200px] hover:bg-red-500">
-                    <SelectValue placeholder="Select difficulty" />
-                  </SelectTrigger>
-                  <SelectContent className="absolute z-50 bg-white shadow-lg">
-                    {difficulties.map((difficulty) => (
-                      <SelectItem key={difficulty.id} value={difficulty.id}>
-                        <div className="flex items-center gap-2">
-                          <difficulty.icon className="h-4 w-4" />
-                          {difficulty.name}
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+              <Select value={selectedDifficulty} onValueChange={setSelectedDifficulty}>
+                <SelectTrigger className="min-w-[200px] hover:bg-red-500">
+                  <SelectValue placeholder="Select difficulty" />
+                </SelectTrigger>
+                <SelectContent className="absolute z-50 bg-white shadow-lg">
+                  {difficulties.map((difficulty) => (
+                    <SelectItem key={difficulty.id} value={difficulty.id}>
+                      <div className="flex items-center gap-2">
+                        <difficulty.icon className="h-4 w-4" />
+                        {difficulty.name}
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </CardContent>
           <CardFooter>
             <Button
               className="w-full hover:bg-green-500"
               disabled={!selectedSubject || !selectedDifficulty}
-              onClick={() => onStartQuiz(selectedSubject, selectedDifficulty)}
+              onClick={handleStartQuiz}
             >
               Start Quiz
             </Button>
@@ -171,6 +177,22 @@ export default function Dashboard({ onStartQuiz }: Props) {
           </CardContent>
         </Card>
       </div>
+
+      {/* Quiz Instructions Modal */}
+      {showInstructions && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+            <h2 className="text-2xl font-bold mb-4">Quiz Instructions</h2>
+            <p className="mb-4">1. Read each question carefully before answering.</p>
+            <p className="mb-4">2. You have 10 minutes to complete the quiz.</p>
+            <p className="mb-4">3. No external help is allowed during the quiz.</p>
+            <div className="flex justify-end space-x-4">
+              <Button variant="outline" onClick={() => setShowInstructions(false)}>Cancel</Button>
+              <Button onClick={confirmStartQuiz}>Start Quiz</Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

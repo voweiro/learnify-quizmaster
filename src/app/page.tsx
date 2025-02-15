@@ -26,12 +26,7 @@ export default function Home() {
   }
 
   return (
-    <div className={`min-h-screen bg-background ${isDarkMode ? "dark" : ""}`}>
-      <div className="fixed top-4 right-4">
-        <Button variant="ghost" size="icon" onClick={toggleDarkMode}>
-          {isDarkMode ? <SunIcon className="h-5 w-5" /> : <MoonIcon className="h-5 w-5" />}
-        </Button>
-      </div>
+    
       <Dashboard
         onStartQuiz={(subject, difficulty) => {
           setSelectedSubject(subject)
